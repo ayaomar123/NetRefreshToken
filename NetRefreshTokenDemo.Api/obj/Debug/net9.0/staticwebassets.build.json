@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "4zWZtPmtWdn4WJZpU5PHPNcYeDZyBoOU/WsC1Cq8wcw=",
+  "Source": "NetRefreshTokenDemo.Api",
+  "BasePath": "_content/NetRefreshTokenDemo.Api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}
