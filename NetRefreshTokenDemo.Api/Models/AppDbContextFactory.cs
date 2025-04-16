@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
+using System.IO;
 
 namespace NetRefreshTokenDemo.Api.Models
 {
@@ -7,16 +9,19 @@ namespace NetRefreshTokenDemo.Api.Models
     {
         public AppDbContext CreateDbContext(string[] args)
         {
-            // مسار ملف appsettings.json
-            var configuration = new ConfigurationBuilder()
+            // تحميل ملف الإعدادات
+            IConfigurationRoot configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json")
                 .Build();
 
             var builder = new DbContextOptionsBuilder<AppDbContext>();
-            var connectionString = configuration.GetConnectionString("default");
 
-            builder.UseNpgsql(connectionString);
+            // الحصول على connection string
+            var connectionString = configuration.GetConnectionString("DefaultConnection");
+
+            // استخدام SQL Server
+            builder.UseSqlServer(connectionString);
 
             return new AppDbContext(builder.Options);
         }

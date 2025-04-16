@@ -7,7 +7,6 @@ namespace NetRefreshTokenDemo.Api.Models
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
-
         }
 
         public DbSet<TokenInfo> TokenInfos { get; set; }
