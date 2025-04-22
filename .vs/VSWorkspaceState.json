@@ -1,0 +1,14 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\NetRefreshTokenDemo.Api",
+    "\\NetRefreshTokenDemo.Api\\Controllers",
+    "\\NetRefreshTokenDemo.Api\\Migrations",
+    "\\NetRefreshTokenDemo.Api\\Models",
+    "\\NetRefreshTokenDemo.Api\\Models\\DTOs",
+    "\\NetRefreshTokenDemo.Api\\Properties",
+    "\\NetRefreshTokenDemo.Api\\Services"
+  ],
+  "SelectedNode": "\\NetRefreshTokenDemo.Api\\appsettings.json",
+  "PreviewInSolutionExplorer": false
+}

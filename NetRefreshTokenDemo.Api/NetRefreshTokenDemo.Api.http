@@ -1,6 +1,6 @@
 @NetRefreshTokenDemo_Api_HostAddress = http://localhost:5021
 
-GET {{NetRefreshTokenDemo_Api_HostAddress}}/weatherforecast/
+POST {{NetRefreshTokenDemo_Api_HostAddress}}/signup
 Accept: application/json
 
 ###

@@ -12,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 // 🔹 1. Add services to the container
 
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
+//builder.Services.AddEndpointsApiExplorer();
 
 // 🟢 2. Connection string
 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")!;
@@ -27,35 +27,35 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddDefaultTokenProviders();
 
 // 🟢 5. Add Authentication
-builder.Services.AddAuthentication(options =>
+builder.Services.AddAuthentication(options => // لتفعيل المصادقة
 {
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    //هنا بدي احكي للتطبيق انه المصادقة من jwt وكل ركوست مبعوت معه توكن اتاكد انه jwt
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme; //لنظام الرئيسي للمصادقة سيكون JWT
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 })
-.AddJwtBearer(options =>
+.AddJwtBearer(options => //إعدادات التحقق من صحة التوكين JWT
 {
-    options.SaveToken = true;
-    options.RequireHttpsMetadata = false;
-    options.TokenValidationParameters = new TokenValidationParameters
+    options.SaveToken = true; //خزن التوكين داخل HttpContext، بحيث تقدر توصله لاحقًا إن احتجته
+    options.RequireHttpsMetadata = false; //يسمح باستخدام HTTP في التطوير
+    options.TokenValidationParameters = new TokenValidationParameters //التحقق من صحة JWT Token.
     {
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidAudience = builder.Configuration["JWT:ValidAudience"],
-        ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
-        ClockSkew = TimeSpan.Zero,
+        ValidateIssuer = true, //التوكين صادق وجاي من جهة مصدّقة
+        ValidateAudience = true, //تحقق من أن التوكين موجه لهذا الـ API (الجمهور).
+        ValidAudience = builder.Configuration["JWT:ValidAudience"], //الجهة المصدّرة المقبولة للتوكين
+        ValidIssuer = builder.Configuration["JWT:ValidIssuer"], //الجمهور المسموح له باستخدام التوكين
+        ClockSkew = TimeSpan.Zero, //إلغاء أي تأخير زمني في وقت انتهاء التوكين (افتراضيًا .NET يسمح بـ 5 دقائق تأخير)
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
-            builder.Configuration["JWT:secret"]!))
+            builder.Configuration["JWT:secret"]!)) //المفتاح السري المستخدم للتحقق من التوقيع الخاص بالتوكين
     };
 });
 
-// 🟢 6. Add Authorization
 builder.Services.AddAuthorization();
 
-// 🟢 7. Add custom services (إن وجد)
+
+//register services
 builder.Services.AddScoped<ITokenService, TokenService>();
 
-// 🔹 8. Build the app
 var app = builder.Build();
 
 
@@ -66,7 +66,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// 🔹 10. Seed admin user
 await DbSeeder.SeedData(app);
 
 app.Run();

@@ -1,4 +1,4 @@
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -17,6 +17,7 @@ public class AuthController : ControllerBase
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly ILogger<AuthController> _logger;
+
     private readonly ITokenService _tokenService; // new code
     private readonly AppDbContext _context; // new code
 
@@ -25,6 +26,7 @@ public class AuthController : ControllerBase
         _userManager = userManager;
         _roleManager = roleManager;
         _logger = logger;
+
         _tokenService = tokenService;  // new code
         _context = context; // new code
     }
@@ -40,7 +42,6 @@ public class AuthController : ControllerBase
                 return BadRequest("User already exists");
             }
 
-            // Create User role if it doesn't exist
             if ((await _roleManager.RoleExistsAsync(Roles.User)) == false)
             {
                 var roleResult = await _roleManager
@@ -63,7 +64,6 @@ public class AuthController : ControllerBase
                 EmailConfirmed = true
             };
 
-            // Attempt to create a user
             var createUserResult = await _userManager.CreateAsync(user, model.Password);
 
             // Validate user creation. If user is not created, log the error and
@@ -113,7 +113,7 @@ public class AuthController : ControllerBase
             List<Claim> authClaims = [
                     new (ClaimTypes.Name, user.UserName),
                 new (JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), 
-                // unique id for token
+                // jti stands for jwt id
         ];
 
             var userRoles = await _userManager.GetRolesAsync(user);
@@ -202,7 +202,7 @@ public class AuthController : ControllerBase
         }
     }
 
-    [HttpPost("token/revoke")]
+    [HttpPost("token/revoke")] //إلغاء التوكين
     [Authorize]
     public async Task<IActionResult> Revoke()
     {
